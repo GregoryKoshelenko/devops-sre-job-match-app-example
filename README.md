@@ -1,6 +1,10 @@
-# devops-sre-job-match-app-example
+# JobMatch
 
-Example job-search app for learning DevOps/SRE workflows and deploying to Kubernetes. Upload a CV, search in natural language, and get ranked matches with apply links.
+**AI-powered** job search — upload a CV, search in natural language, and get ranked matches with apply links.
+
+Example app for learning DevOps/SRE workflows and deploying to Kubernetes.
+
+![Job search demo](demo.gif)
 
 ## What it does
 
