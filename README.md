@@ -62,14 +62,6 @@ Set `LLM_PROVIDER=auto` (default) and provide **one** API key. Priority when `au
 
 Or set `LLM_PROVIDER=openai`, `gemini`, or `claude` to force a provider (that key must be set).
 
-Job search uses each provider’s **built-in web search** (no separate Tavily/Serper keys):
-
-| Provider | Web search |
-|----------|------------|
-| Gemini | Google Search grounding |
-| OpenAI | Responses API `web_search` |
-| Claude | `web_search_20250305` tool |
-
 ### Variable reference
 
 **LLM (set one key for real AI)**
@@ -94,72 +86,12 @@ Job search uses each provider’s **built-in web search** (no separate Tavily/Se
 | `UPLOAD_DIR` | Optional | `./uploads` | CV upload storage path |
 | `SKILLS_DIR` | Optional | auto `./skills` | Agent skills directory |
 
-**Job search tuning**
-
-| Variable | Required? | Default | Description |
-|----------|-----------|---------|-------------|
-| `JOB_SEARCH_CONCURRENCY` | Optional | `4` | Parallel board queries per search |
-| `JOB_SEARCH_RESULTS_PER_BOARD` | Optional | `8` | Max listings fetched per board |
-| `JOB_SEARCH_FETCH_TIMEOUT_MS` | Optional | `15000` | HTTP timeout for board fetch (ms) |
-
 **Local dev / Docker**
 
 | Variable | Required? | Default | Description |
 |----------|-----------|---------|-------------|
 | `VITE_API_PROXY_TARGET` | Optional | `http://127.0.0.1:3001` | Vite dev proxy to API (local `npm run dev` only) |
 | `HOST_PORT` | Optional | `8080` | Published web port in Docker Compose |
-
-### Examples
-
-**Minimal — OpenAI only (local dev)**
-
-```env
-LLM_PROVIDER=auto
-OPENAI_API_KEY=sk-...
-```
-
-**Force Gemini**
-
-```env
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=...
-```
-
-**Docker with custom port**
-
-```env
-OPENAI_API_KEY=sk-...
-HOST_PORT=9090
-PUBLIC_URL=http://localhost:9090
-```
-
-**Kubernetes**
-
-Store `OPENAI_API_KEY` (or other LLM keys) in a Secret; put `LLM_PROVIDER` and optional tuning vars in a ConfigMap. Mount or set `SKILLS_DIR=/app/skills` in the API container.
-
-### After editing job boards
-
-Job boards are defined in `src/lib/jobWebsites.ts`. Regenerate the server catalog when you change them:
-
-```bash
-node server/scripts/build-job-boards.mjs
-# or: npm run build --prefix server
-```
-
-## Agent skills
-
-Skills live in `skills/<name>/SKILL.md`. The server loads them and attaches relevant ones per task:
-
-| Task | Skills used |
-|------|-------------|
-| Job match | `job-search`, `global-job-boards`, `agent-tools`, `job-crawler`, `job-match-scoring`, `job-analyzer`, `transferable-skills`, `structured-output` |
-| CV extract | `cv-extraction`, `structured-output` |
-
-Add folders under `skills/` to extend agent behavior without changing provider code.
-
-Additional skills adapted from the MIT-licensed [job-search-skills](https://github.com/sameergdogg/job-search-skills) collection (`job-crawler`, scoring rubric, fit analysis).
-
-Implementation: `server/agent/JobSearchAgent.ts`, `server/ai/AIClient.ts`.
 
 ## Docker
 
